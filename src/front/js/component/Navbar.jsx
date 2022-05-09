@@ -16,7 +16,7 @@ export const Navbar = () => {
             className="btn btn-primary"
             onClick={() => actions.isRegistered()}
           >
-            Sign up
+            {store.registered ? "Sign up" : "Log In"}
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const LogInForm = () => {
@@ -7,6 +8,7 @@ export const LogInForm = () => {
     email: "",
     password: "",
   });
+  let history = useHistory();
 
   return (
     <form>
@@ -44,6 +46,7 @@ export const LogInForm = () => {
         onClick={(e) => {
           e.preventDefault();
           actions.logIn(logIn);
+          history.push("/demo");
         }}
       >
         Submit
@@ -54,10 +57,11 @@ export const LogInForm = () => {
 
 export const SignUpForm = () => {
   const { store, actions } = useContext(Context);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [signUp, setSignUp] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
+    is_active: true,
   });
   return (
     <form className="needs-validation">
@@ -99,10 +103,8 @@ export const SignUpForm = () => {
           type="password"
           className="form-control"
           id="exampleInputPassword1"
-          onChange={(e) =>
-            setSignUp({ ...signUp, confirmPassword: e.target.value })
-          }
-          value={signUp.confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={confirmPassword}
           required
         />
       </div>
@@ -111,7 +113,7 @@ export const SignUpForm = () => {
         className="btn btn-primary"
         onClick={(e) => {
           e.preventDefault();
-          signUp.password === signUp.confirmPassword
+          signUp.password === confirmPassword
             ? actions.signUp(signUp)
             : alert("Password no match");
         }}

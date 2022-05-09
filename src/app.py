@@ -12,10 +12,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 
-""" JWT Modules """
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
+
 from flask_jwt_extended import JWTManager
 
 #from models import Person
@@ -73,34 +70,7 @@ def serve_any_other_file(path):
     return response
 
 
-# Login
-@app.route("/login", methods=["POST"])
-def login():
-    body = request.get_json()
-    if "email" not in body  or body['email'] == "":
-        raise APIException("User not found", status_code=400)
-    if "password" not in body  or body['password'] == "":
-        raise APIException("User not found", status_code=400)
-    
-    user = User.query.filter_by(email=body['email']).first()
 
-    if user == None:
-        raise APIException("User not found", status_code=404)
-    if body['email'] != user.email:
-        raise APIException("User not found", status_code=400)
-    else:
-        access_token = create_access_token(identity=body['email'])
-        return jsonify(access_token=access_token)
-
-
-# Protect a route with jwt_required, which will kick out requests
-# without a valid JWT present.
-@app.route("/protected", methods=["GET"])
-@jwt_required()
-def protected():
-    # Access the identity of the current user with get_jwt_identity
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
 
 
 # this only runs if `$ python src/main.py` is executed
