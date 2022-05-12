@@ -96,13 +96,13 @@ export const SignUpForm = () => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="exampleInputPassword1" className="form-label">
+        <label htmlFor="exampleInputConfirmPassword1" className="form-label">
           Confirm Password
         </label>
         <input
           type="password"
           className="form-control"
-          id="exampleInputPassword1"
+          id="exampleInputConfirmPassword1"
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword}
           required

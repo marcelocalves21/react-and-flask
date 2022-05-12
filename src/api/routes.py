@@ -39,7 +39,8 @@ def login():
 def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
+    user = User.query.filter_by(email=current_user).first()
+    return jsonify({"first_name": user.first_name, "email":user.email}), 200
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -76,7 +77,7 @@ def handle__one_user(user_id):
     return jsonify(user.serialize()), 200
 
 
-@api.route('/user', methods=['POST'])
+@api.route('/signup', methods=['POST'])
 def handle_add_user():
 
     # First we get the payload json
@@ -84,15 +85,20 @@ def handle_add_user():
 
     if body is None:
         raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'password' not in body:
+    if 'password' not in body or body['password'] == "":
         raise APIException('You need to specify the password', status_code=400)
-    if 'email' not in body:
+    if 'email' not in body or body['email'] == "":
         raise APIException('You need to specify the email', status_code=400)
-    if 'is_active' not in body:
-        raise APIException('You need to specify the is_active', status_code=400)
+    if 'first_name' not in body or body['first_name'] == "":
+        raise APIException('You need to specify the email', status_code=400)
+    if 'last_name' not in body or body['last_name'] == "":
+        raise APIException('You need to specify the email', status_code=400)
+    if 'dob' not in body or body['dob'] == "":
+        raise APIException('You need to specify the email', status_code=400)
+    
 
     # at this point, all data has been validated, we can proceed to inster into the bd
-    new_user = User(password=body['password'], email=body['email'], is_active=body['is_active'])
+    new_user = User(password=body['password'], email=body['email'], first_name=body['first_name'], last_name=body['last_name'], dob=body['dob'])
     db.session.add(new_user)
     db.session.commit()
     return f"User {body['email']} was successfully added", 200
