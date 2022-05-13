@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       registered: false,
-      accessToken: undefined,
+      user: {},
     },
     actions: {
       isRegistered: () => {
@@ -10,50 +10,44 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ registered: !res });
       },
       signUp: (user) => {
-        fetch(
-          "https://3001-marcelocalv-reactandfla-fpiqme3yuwb.ws-us44.gitpod.io/api/user",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-            redirect: "follow",
-          }
-        )
+        fetch(`${process.env.BACKEND_URL}/api/signup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(user),
+          mode: "no-cors",
+          redirect: "follow",
+        })
           .then((response) =>
             response.ok ? setStore({ registered: true }) : ""
           )
           .catch((error) => console.log("error", error));
       },
       logIn: (user) => {
-        console.log(user);
-        fetch(`${process.env.BA}`, {
+        fetch(`${process.env.BACKEND_URL}/api/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(user),
-          mode: "no-cors",
           redirect: "follow",
         })
           .then((response) => response.json())
-          .then((result) => console.log(result))
+          .then((result) => getActions().verifyUser(result.access_token))
           .catch((error) => console.log("error", error));
       },
       verifyUser: (token) => {
-        fetch(
-          "https://3001-marcelocalv-reactandfla-fpiqme3yuwb.ws-us44.gitpod.io/api/login",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            redirect: "follow",
-          }
-        )
+        fetch(`${process.env.BACKEND_URL}/api/protected`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          redirect: "follow",
+        })
           .then((response) => response.json())
-          .then((result) => setStore({ accessToken: result.access_token }))
+          .then((result) => setStore({ user: result }))
           .catch((error) => console.log("error", error));
       },
     },

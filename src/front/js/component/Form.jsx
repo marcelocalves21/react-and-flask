@@ -61,10 +61,63 @@ export const SignUpForm = () => {
   const [signUp, setSignUp] = useState({
     email: "",
     password: "",
-    is_active: true,
+    firstName: "",
+    lastName: "",
+    dob: "",
   });
   return (
     <form className="needs-validation">
+      <div className="mb-3">
+        <label htmlFor="exampleInputFirstName" className="form-label">
+          First Name
+        </label>
+        <input
+          type="input"
+          className="form-control"
+          id="exampleInputFirstName"
+          aria-describedby="firstName"
+          onChange={(e) => setSignUp({ ...signUp, firstName: e.target.value })}
+          value={signUp.firstName}
+          required
+        />
+        <div id="firstName" className="form-text">
+          We'll never share your email with anyone else.
+        </div>
+      </div>
+      <div className="mb-3">
+        <label htmlFor="exampleInputLastName" className="form-label">
+          Last Name
+        </label>
+        <input
+          type="input"
+          className="form-control"
+          id="exampleInputLastName"
+          aria-describedby="lastName"
+          onChange={(e) => setSignUp({ ...signUp, lastName: e.target.value })}
+          value={signUp.lastName}
+          required
+        />
+        <div id="lastName" className="form-text">
+          We'll never share your email with anyone else.
+        </div>
+      </div>
+      <div className="mb-3">
+        <label htmlFor="exampleInputDOB" className="form-label">
+          DOB
+        </label>
+        <input
+          type="input"
+          className="form-control"
+          id="exampleInputDOB"
+          aria-describedby="DOB"
+          onChange={(e) => setSignUp({ ...signUp, dob: e.target.value })}
+          value={signUp.dob}
+          required
+        />
+        <div id="DOB" className="form-text">
+          We'll never share your email with anyone else.
+        </div>
+      </div>
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">
           Email address

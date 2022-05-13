@@ -23,10 +23,8 @@ def login():
     
     user = User.query.filter_by(email=body['email']).first()
 
-    if user == None:
-        raise APIException("User not found", status_code=404)
-    if body['email'] != user.email:
-        raise APIException("User not found", status_code=400)
+    if user == None or body['password'] != user.password:
+        raise APIException("User not found or password incorrect", status_code=400)
     else:
         access_token = create_access_token(identity=body['email'])
         return jsonify(access_token=access_token)
@@ -40,7 +38,7 @@ def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
     user = User.query.filter_by(email=current_user).first()
-    return jsonify({"first_name": user.first_name, "email":user.email}), 200
+    return jsonify({"first_name": user.first_name, "email":user.email, "auth": True}), 200
 
 
 @api.route('/hello', methods=['POST', 'GET'])

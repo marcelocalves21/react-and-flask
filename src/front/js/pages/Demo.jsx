@@ -5,10 +5,10 @@ import { Context } from "../store/appContext";
 
 export const Demo = () => {
   const { store, actions } = useContext(Context);
-
+  console.log(store.user);
   return (
     <>
-      {store.accessToken ? (
+      {store.user.auth ? (
         <div className="container">
           <h1>Demo page</h1>
         </div>
